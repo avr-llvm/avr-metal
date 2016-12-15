@@ -1,0 +1,6 @@
+import sys
+
+# Configure file used to grab LLVM CMake settings so we can
+# use them when running lit.
+
+config.llvm_tools_dir = "@LLVM_TOOLS_BINARY_DIR@"
