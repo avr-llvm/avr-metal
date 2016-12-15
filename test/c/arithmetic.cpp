@@ -2,6 +2,8 @@
 
 #include "support.h"
 
+extern "C" {
+
 #define DEFINE_HELPERS(name, op)                      \
   u8 name##_u8_u8(u8 a, u8 b) { return a op b; }      \
   u16 name##_u16_u16(u16 a, u16 b) { return a op b; } \
@@ -15,6 +17,15 @@ DEFINE_HELPERS(mul, *);
 DEFINE_HELPERS(div, /);
 DEFINE_HELPERS(and, &);
 DEFINE_HELPERS(or, |);
+
+/// Linear interpolation.
+float lerp(float x1, float y1, float x2, float y2, float ratio) {
+  float gradient = (y2-y1)/(x2-x1);
+  float range = x2-x1;
+  float x = range * ratio;
+
+  return y1 + (gradient*x);
+}
 
 void test_addition() {
   // CHECK: add_u8_u8(a: 51, b: 42)
@@ -116,6 +127,19 @@ void test_or() {
   or_u16_u16(0xf0f0, 0x0f0f);
 }
 
+void test_pow() {
+}
+
+void test_lerp() {
+  // CHECK: lerp(x1: 0.000000, y1: 0.000000, x2: 90.000000, y2: 90.000000, ratio: 0.500000)
+  // CHECK-NEXT: return 45.000000
+  lerp(0.0f, 0.0f, 90.0f, 90.0f, 0.5f);
+
+  // CHECK: lerp(x1: 0.000000, y1: 0.000000, x2: 90.000000, y2: 90.000000, ratio: 1.000000)
+  // CHECK-NEXT: return 90.000000
+  lerp(0.0f, 0.0f, 90.0f, 90.0f, 1.0f);
+}
+
 void test() {
   test_addition();
   test_subtraction();
@@ -123,5 +147,8 @@ void test() {
   test_div();
   test_and();
   test_or();
+  test_pow();
+  test_lerp();
 }
 
+} // end extern "C"
