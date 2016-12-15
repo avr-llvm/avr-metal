@@ -1,4 +1,4 @@
-; RUN: avrlit %s
+; RUN: avrlit %s | FileCheck %s
 
 ; CHECK-LABEL: test
 define i16 @test() {
